@@ -36,10 +36,26 @@ gameScene.create = function(){
     // console.log(gameW, gameH); 
 
     // console.log(bg);
+    
+      this.cursorKeys = this.input.keyboard.createCursorKeys();
+
 };
 
 gameScene.update = function(){
-    this.player.x += 1;
+    if(this.cursorKeys.left.isDown)
+    {
+        this.player.x -= 4;
+    }
+    else if (this.cursorKeys.right.isDown) 
+    {
+        this.player.x += 4;
+    }
+    if (this.cursorKeys.up.isDown) {
+        this.player.y -= 4;
+    }
+    else if (this.cursorKeys.down.isDown) {
+        this.player.y += 4;
+    }
 };
 
 // set the configuration of the game
@@ -47,6 +63,12 @@ let config = {
     type: Phaser.AUTO, // Phaser will use WebGL if available, if not it will use Canvas
     width: 640,
     height: 360,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            debug: true
+        }
+    },
     scene: gameScene
 };
 
