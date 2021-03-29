@@ -3,14 +3,22 @@ let gameScene = new Phaser.Scene('Game');
 
 // Load assets
 gameScene.preload = function(){
+    // Load HTML
+    this.load.html("form", "index.html");
+
     // Load images 
     this.load.image('background', 'assets/background.png');
     this.load.image('player', 'assets/player.png');
     this.load.image('treasure', 'assets/treasure.png');
 };
 
+var button;
+
 // called once after the preload ends
 gameScene.create = function(){
+
+  
+
     // create bg sprite
     let bg = this.add.sprite(0, 0, 'background');
 
@@ -39,22 +47,45 @@ gameScene.create = function(){
     
       this.cursorKeys = this.input.keyboard.createCursorKeys();
 
+    // create button
+    const rightBtn = this.add.text(100, 100, 'Right!', { fill: '#0f0' });
+    rightBtn.setInteractive();
+    rightBtn.on('pointerdown', () => { this.player.x += 10; });
+
+
+    // create input form
+    this.nameInput = this.add.dom(640, 360).createFromCache("form");
+
+    // create return key
+    this.returnKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+
+    this.returnKey.on("down", event => {
+        let name = document.getElementById("name");
+        console.log(name.value);
+        if (name.value != "") {
+            this.player.x += parseInt(name.value);
+            name.value = "";
+        }
+    });
 };
 
 gameScene.update = function(){
+
+    
+    // using cursorKeys to help move the character
     if(this.cursorKeys.left.isDown)
     {
-        this.player.x -= 4;
+        this.player.x -= 10;
     }
     else if (this.cursorKeys.right.isDown) 
     {
-        this.player.x += 4;
+        this.player.x += 10;
     }
     if (this.cursorKeys.up.isDown) {
-        this.player.y -= 4;
+        this.player.y -= 10;
     }
     else if (this.cursorKeys.down.isDown) {
-        this.player.y += 4;
+        this.player.y += 10;
     }
 };
 
@@ -68,6 +99,9 @@ let config = {
         arcade: {
             debug: true
         }
+    }, 
+    dom: {
+        createContainer: true
     },
     scene: gameScene
 };
